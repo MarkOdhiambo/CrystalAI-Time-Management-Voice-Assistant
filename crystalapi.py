@@ -5,8 +5,8 @@ app = Flask(__name__)
 api = Api(app)
 
 TODOS = {
-    '1': {'task': 'Build an API.'},
-    '2': {'task': 'Go to and buy some shopping.'}
+    "1": {'task': 'Build an API.'},
+    "2": {'task': 'Go to and buy some shopping.'}
 }
 
 LOG = {
@@ -51,7 +51,7 @@ class TodoList(Resource):
         args = parser.parse_args()
         todo_id = int(max(TODOS.keys())) + 1
         # todo_id = 'todo%i' % todo_id
-        TODOS[todo_id] = {'task': args['task']}
+        TODOS[todo_id] = {"task": args['task']}
         return TODOS[todo_id], 201
 
 #Error handling for the todo list
@@ -81,8 +81,8 @@ class Log(Resource):
         return task, 201
 
 
-# TodoList
-# shows a list of all todos, and lets you POST to add new tasks
+# Activity log
+# shows a list of all logs, and lets you POST to add new log
 class activityLog(Resource):
     def get(self):
         return LOG
