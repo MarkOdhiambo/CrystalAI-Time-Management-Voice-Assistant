@@ -60,7 +60,7 @@ def abort_if_log_doesnt_exist(log_id):
         abort(404, message="Todo {} doesn't exist".format(log_id))
 
 logparser = reqparse.RequestParser()
-logparser.add_argument('log')
+logparser.add_argument('log',location='form')
 
 # Activity log
 # shows a single activity log item and lets you delete a log item
@@ -91,7 +91,7 @@ class activityLog(Resource):
         args = logparser.parse_args()
         log_id = int(max(LOG.keys())) + 1
         # todo_id = 'todo%i' % todo_id
-        LOG[log_id] = {'task': args['task']}
+        LOG[log_id] = {'log': args['log']}
         return LOG[log_id], 201
 
 ##
