@@ -8,10 +8,10 @@ import datetime
 import speech_recognition as sr
 import pyttsx3
 import requests
+from texttotime import speechtodate
 
 #Declaring constants
-#Todo url
-Todourl='http://127.0.0.1:5000/todos'
+
 #Log url
 Logurl="http://127.0.0.1:5000/log"
 
@@ -61,27 +61,33 @@ def takeUtterance(var):
     
 #log manager for the activitylog
 def logManager(var):
-    log=dateCalculation() +" " + var
+    log=dateCalculation()+" " + var
     requests.post(Logurl, data={'log': log}).json()
-#Information or data to be posted into the api
-if __name__=='__main__':
     
+#Information or data to be posted into the api
+if __name__=='__main__': 
     while True:
         wake=takeUtterance(3).lower()
         #print("This is the wake word statement")
         if "mark" in wake:
             #Wake word handler hook 
             wake=True
+            open=0
             while wake:
-                logManager("Wake word detected program begun")
-                print("Wake word detected.")
-                print(timeSalutation()+" This is the crystal time management platform I can manage a todo list, work on a project and check your calendar. What would you like to do today?")
+                #Openning message event handler
+                if open==1:
+                    print("What can I do for you set a remainder or access a todo list?")
+                if open==0:
+                    logManager("Wake word detected program begun")
+                    print("Wake word detected.")
+                    print(timeSalutation()+" This is the crystal time management platform I can manage a todo list and set a remainder. What would you like to do today?")
+                    open+=1
                 statement=takeUtterance(5).lower()
                 if len(statement)==4:
                     print("You haven't said a thing, how can I help you?")
                     continue
                 #This is the todo intent.
-                elif "todo" or "list" or "to do" in statement:
+                elif "todo" in statement or "list" in statement:
                     #todo list intent handler
                     todoHook=True
                     #reinitializing statement
@@ -90,7 +96,9 @@ if __name__=='__main__':
                         print("Would you like to add ,check or exit your todo list?")
                         todoTarget=takeUtterance(6).lower()
                         logManager("Accessed todo list")
-                        if "add" in todoTarget:
+                        if len(todoTarget)==4:
+                            print("I didn't hear you could you repeat")
+                        elif "add" in todoTarget:
                             todoTarget=""
                             print("What would you like to add to the todo-list")
                             add=takeUtterance(10).lower()
@@ -121,18 +129,45 @@ if __name__=='__main__':
                         elif "check" in todoTarget:
                             todoTarget=""
                             print("This is your current todo-list")
+                            response=requests.get('http://127.0.0.1:5000/todos').json()
+                            for todo in response:
+                                    print(todo['task'])
                         elif "exit" or "leave" in todoTarget:
                             todoTarget=""
                             todoHook=False
-                        elif len(todoTarget)==4:
-                            continue
+                        
                 
                 #This is the remainder intent.
-                elif "remainder" in statement:
+                elif "remainder" in statement or "reminder" in statement:
                     logManager("Accessed the Remainder")
-                    print("What day would you like to set you remainder?")
-                    remainderDay=takeUtterance(10).lower()
-                        
+                    print("Would you like to set a remainder or check you remainder?")
+                    remainder=takeUtterance(6).lower()
+                    if len(remainder) ==4:
+                        print("You can either set or check you remainders")
+                    elif "set" in remainder:
+                        print("What day would you like to set your remainder")
+                        #Remainder event handler
+                        remain=True
+                        while remain:
+                            day=takeUtterance(6).lower()
+                            senddate=speechtodate(day)
+                            if senddate!=0:
+                                print("What would you like to do?")
+                                rem=takeUtterance(6).lower()
+                                print("At what time?")
+                                time=takeUtterance(6).lower()
+                                print("Would you like to set another remainder or no to exit?")
+                                nextrem=takeUtterance(6).lower()
+                                requests.post('http://127.0.0.1:5000/remainder', data={'remainder': rem,'date':senddate, 'time':time}).json()
+                                if "no" in nextrem:
+                                    remain=False
+                                elif "yes" in nextrem:
+                                    continue
+                            elif senddate==0 or senddate=="None":
+                                print("I didn't get the date well, could you please repeat?")
+                            elif 'exit' in senddate:
+                                remain=False
+
                 #This is the project intent
                 elif "project" in statement:
                     logManager("Accessed the project")
@@ -189,6 +224,7 @@ if __name__=='__main__':
                 elif "good bye" in statement or "goodbye" in statement or "ok bye" in statement or "turn off" in statement or "quit" in statement:
                     logManager("Exit intent detected program closed.")
                     wake=False
+                    open=0
                     print ('Thank you and take care')
                     break
                 #Error handler of the program
