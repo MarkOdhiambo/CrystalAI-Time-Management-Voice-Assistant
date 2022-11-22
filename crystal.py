@@ -48,6 +48,7 @@ def takeUtterance(var):
         #This is for the adjust of the background noise in around the speaker. 
         r.adjust_for_ambient_noise(source,duration=0.2)
         audio=r.record(source,duration=var)
+        #recording done
         
         try: 
             statement=r.recognize_google(audio,language="en-in")
@@ -67,6 +68,7 @@ if __name__=='__main__':
     
     while True:
         wake=takeUtterance(3).lower()
+        #print("This is the wake word statement")
         if "mark" in wake:
             #Wake word handler hook 
             wake=True
