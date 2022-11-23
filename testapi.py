@@ -20,6 +20,8 @@ response01=requests.get('http://127.0.0.1:5000/todos').json()
 variable="Remember the milk"
 requests.post('http://127.0.0.1:5000/todos', data={'task': variable}).json()
 response02=requests.get('http://127.0.0.1:5000/todos').json()
-print(response02)
-for todo in response02:
-    print(todo['task'])
+TODOS = [
+    {'id':1,'task': 'Build an API'},
+    {'id':2,'task': 'Write my documentation'},
+    {'id':3,'task': 'Profit!'}
+]

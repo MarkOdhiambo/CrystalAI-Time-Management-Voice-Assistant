@@ -34,7 +34,8 @@ class Todo(Resource):
         todo_id=int(todo_id)
         for todo in TODOS:
             if todo_id==todo['id']:
-                del TODOS[todo_id]
+                index=TODOS.index(todo)
+                del TODOS[index]
         return '', 204
 
 # TodoList
