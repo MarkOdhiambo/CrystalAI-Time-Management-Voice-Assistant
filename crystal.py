@@ -33,6 +33,7 @@ def timeSalutation():
         return"Good Afternoon"
     else:
         return"Good evening"
+        
 def dateCalculation():
     year=str(datetime.datetime.now().year)
     day=str(datetime.datetime.now().day)
@@ -76,15 +77,15 @@ if __name__=='__main__':
             while wake:
                 #Openning message event handler
                 if open==1:
-                    print("What can I do for you set a remainder or access a todo list?")
+                    speak("What can I do for you set a remainder or access a todo list?")
                 if open==0:
                     logManager("Wake word detected program begun")
                     print("Wake word detected.")
-                    print(timeSalutation()+" This is the crystal time management platform I can manage a todo list and set a remainder. What would you like to do today?")
+                    speak(timeSalutation()+" This is the crystal time management platform I can manage a todo list and set a remainder. What would you like to do today?")
                     open+=1
                 statement=takeUtterance(5).lower()
                 if len(statement)==4:
-                    print("You haven't said a thing, how can I help you?")
+                    speak("You haven't said a thing, how can I help you?")
                     continue
                 #This is the todo intent.
                 elif "todo" in statement or "list" in statement:
@@ -93,70 +94,70 @@ if __name__=='__main__':
                     #reinitializing statement
                     statement=""
                     while todoHook:
-                        print("Would you like to add ,check or exit your todo list?")
+                        speak("Would you like to add ,check or exit your todo list?")
                         todoTarget=takeUtterance(6).lower()
                         logManager("Accessed todo list")
                         if len(todoTarget)==4:
-                            print("I didn't hear you could you repeat")
+                            speak("I didn't hear you could you repeat")
                         elif "add" in todoTarget:
                             todoTarget=""
-                            print("What would you like to add to the todo-list")
+                            speak("What would you like to add to the todo-list")
                             add=takeUtterance(10).lower()
                             requests.post('http://127.0.0.1:5000/todos', data={'task': add}).json()
                             logManager("Add item to todolist")
                             #Variable to monitor your todo
                             hook=True
                             while hook:
-                                print("Is there anything else you would like to add?")
+                                speak("Is there anything else you would like to add?")
                                 addTodo=takeUtterance(10).lower()
                                 #Handling some error context
                                 if len(addTodo)==4:
                                     addTodo=""
-                                    print("I didn't understand could you please repeat answer yes or no?")
+                                    speak("I didn't understand could you please repeat answer yes or no?")
                                     continue
                                 elif 'yes' in addTodo:
                                     addTodo=""
-                                    print("What is it?")
+                                    speak("What is it?")
                                     addItem=takeUtterance(6).lower()
                                     requests.post('http://127.0.0.1:5000/todos', data={'task': addItem}).json()
                                     logManager("Add item to todolist")
                                 elif 'no' in addTodo:
                                     addTodo=""
-                                    print("Okay thats great")
+                                    speak("Okay thats great")
                                     logManager("Exit the todolist")
                                     hook=False
                                     todoHook=False
                         elif "check" in todoTarget:
                             todoTarget=""
-                            print("This is your current todo-list")
+                            speak("This is your current todo-list")
                             response=requests.get('http://127.0.0.1:5000/todos').json()
                             for todo in response:
-                                    print(todo['task'])
+                                    speak(todo['task'])
                         elif "exit" or "leave" in todoTarget:
                             todoTarget=""
                             todoHook=False
                         
-                
+           
                 #This is the remainder intent.
                 elif "remainder" in statement or "reminder" in statement:
                     logManager("Accessed the Remainder")
-                    print("Would you like to set a remainder or check you remainder?")
+                    speak("Would you like to set a remainder or check you remainder?")
                     remainder=takeUtterance(6).lower()
                     if len(remainder) ==4:
-                        print("You can either set or check you remainders")
+                        speak("You can either set or check you remainders")
                     elif "set" in remainder:
-                        print("What day would you like to set your remainder")
+                        speak("What day would you like to set your remainder")
                         #Remainder event handler
                         remain=True
                         while remain:
                             day=takeUtterance(6).lower()
                             senddate=speechtodate(day)
                             if senddate!=0:
-                                print("What would you like to do?")
+                                speak("What would you like to do?")
                                 rem=takeUtterance(6).lower()
-                                print("At what time?")
+                                speak("At what time?")
                                 time=takeUtterance(6).lower()
-                                print("Would you like to set another remainder or no to exit?")
+                                speak("Would you like to set another remainder or no to exit?")
                                 nextrem=takeUtterance(6).lower()
                                 requests.post('http://127.0.0.1:5000/remainder', data={'remainder': rem,'date':senddate, 'time':time}).json()
                                 if "no" in nextrem:
@@ -168,68 +169,16 @@ if __name__=='__main__':
                             elif 'exit' in senddate:
                                 remain=False
 
-                #This is the project intent
-                elif "project" in statement:
-                    logManager("Accessed the project")
-                    print("Would you like to view you projects or add to your project list?")
-                    Target=takeUtterance(10).lower()
-                    if "add" in Target:
-                        logManager("Adding a new project")
-                        print("What is the name of the project you would like to add")
-                        add=takeUtterance(10).lower()
-                        print("What are the first step needed to complete you project?")
-                        addProject=takeUtterance(10).lower()
-                        logManager("Adding a item new project")
-                        while True:  
-                            print("Is there next step?")
-                            addItem=takeUtterance(10).lower()
-                            #Handling yes and no intent.addItem
-                            if 'yes' in addItem:
-                                print("What is it?")
-                                addItem=takeUtterance(10).lower()
-                                logManager("Adding a item new project")
-                            elif 'no' in addItem:
-                                print("Okay thats great")
-                                logManager("Close access to the new project")
-                                False
-                            #Handling some error context
-                            else:
-                                print("I didn't understand could you please repeat answer yes or no?")
-
-                    if "view" in Target:
-                        print("What is the name of the project you would like to view or do you want me to list to your project?")
-                
-                #This is the calendar intent.
-                elif "calendar" in statement:
-                    print("Which day would you like to add a task or would you like to view or check task?")
-                    date=takeUtterance(10).lower()
-                    #add a date converter and validation
-                    print("What tasks would you like to add?")
-                    calTask=takeUtterance(10).lower()
-                    while True:
-                        print("Is there anything else you would like to add?")
-                        addCalItem=takeUtterance(10).lower()
-                        #Handling yes and no intent.addItem
-                        if 'yes' in addCalItem:
-                            print("What is it?")
-                            addCalItem=takeUtterance(10).lower()
-                        elif 'no' in addCalItem:
-                            print("Okay thats great")
-                            False
-                        #Handling some error context
-                        else:
-                            print("I didn't understand could you please repeat answer yes or no?")
-
                 #This is the sleep/ exit command of the program.
                 elif "good bye" in statement or "goodbye" in statement or "ok bye" in statement or "turn off" in statement or "quit" in statement:
                     logManager("Exit intent detected program closed.")
                     wake=False
                     open=0
-                    print ('Thank you and take care')
+                    speak('Thank you and take care')
                     break
                 #Error handler of the program
                 else:
-                    print("What would you like to access?")
+                    speak("What would you like to access?")
         else:
             print("No wake word detected.")
     
