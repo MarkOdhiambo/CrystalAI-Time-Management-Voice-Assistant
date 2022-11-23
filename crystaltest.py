@@ -62,7 +62,7 @@ def takeUtterance(var):
 #log manager for the activitylog
 def logManager(var):
     log=dateCalculation()+" " + var
-    requests.post(Logurl, data={'log': log}).json()
+    #requests.post(Logurl, data={'log': log}).json()
     
 #Information or data to be posted into the api
 if __name__=='__main__': 
@@ -102,7 +102,7 @@ if __name__=='__main__':
                             todoTarget=""
                             print("What would you like to add to the todo-list")
                             add=takeUtterance(10).lower()
-                            requests.post('http://127.0.0.1:5000/todos', data={'task': add}).json()
+                            #requests.post('http://127.0.0.1:5000/todos', data={'task': add}).json()
                             logManager("Add item to todolist")
                             #Variable to monitor your todo
                             hook=True
@@ -118,7 +118,7 @@ if __name__=='__main__':
                                     addTodo=""
                                     print("What is it?")
                                     addItem=takeUtterance(6).lower()
-                                    requests.post('http://127.0.0.1:5000/todos', data={'task': addItem}).json()
+                                    #requests.post('http://127.0.0.1:5000/todos', data={'task': addItem}).json()
                                     logManager("Add item to todolist")
                                 elif 'no' in addTodo:
                                     addTodo=""
@@ -129,9 +129,9 @@ if __name__=='__main__':
                         elif "check" in todoTarget:
                             todoTarget=""
                             print("This is your current todo-list")
-                            response=requests.get('http://127.0.0.1:5000/todos').json()
-                            for todo in response:
-                                    print(todo['task'])
+                            # response=requests.get('http://127.0.0.1:5000/todos').json()
+                            # for todo in response:
+                            #         print(todo['task'])
                         elif "exit" or "leave" in todoTarget:
                             todoTarget=""
                             todoHook=False
@@ -158,7 +158,7 @@ if __name__=='__main__':
                                 time=takeUtterance(6).lower()
                                 print("Would you like to set another remainder or no to exit?")
                                 nextrem=takeUtterance(6).lower()
-                                requests.post('http://127.0.0.1:5000/remainder', data={'remainder': rem,'date':senddate, 'time':time}).json()
+                                #requests.post('http://127.0.0.1:5000/remainder', data={'remainder': rem,'date':senddate, 'time':time}).json()
                                 if "no" in nextrem:
                                     remain=False
                                 elif "yes" in nextrem:
