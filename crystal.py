@@ -62,7 +62,7 @@ def takeUtterance(var):
 #log manager for the activitylog
 def logManager(var):
     log=dateCalculation()+" " + var
-    requests.post(Logurl, data={'log': log}).json()
+    #requests.post(Logurl, data={'log': log}).json()
     
 #Information or data to be posted into the api
 if __name__=='__main__': 
