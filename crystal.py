@@ -13,7 +13,7 @@ from texttotime import speechtodate
 #Declaring constants
 
 #Log url
-Logurl="http://127.0.0.1:5000/log"
+#Logurl="http://127.0.0.1:5000/log"
 
 engine=pyttsx3.init()
 # rate=engine.getProperty('rate')
@@ -23,7 +23,7 @@ engine=pyttsx3.init()
 
 def speak(text):
     engine.say(text)
-    engine.runAndWait
+    engine.runAndWait()
 
 def timeSalutation():
     hour=datetime.datetime.now().hour
