@@ -34,6 +34,7 @@ def speechtodate(var):
                         return str(year)+"-"+str(month)+"-"+str(day)
                     else:
                         return str(year)+"-"+str(month)+"-"+str(day)
+        return None
            
     elif 'monday' or 'tuesday' or 'wednesday' or 'thursday' or 'friday' or 'saturday' or 'sunday' in var:
         for dy0 in week_days:
@@ -47,12 +48,4 @@ def speechtodate(var):
     else:
         return 0
 
-                
-TODOS = [
-    {'id':1,'task': 'build an API'},
-    {'id':2,'task': '?????'},
-    {'id':3,'task': 'profit!'}
-]
-
-val=TODOS[-1]
-print(val)
+            

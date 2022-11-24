@@ -14,6 +14,8 @@ from texttotime import speechtodate
 
 #Log url
 Logurl="http://127.0.0.1:5000/log"
+Todourl="http://127.0.0.1:5000/todos"
+Remurl="http://127.0.0.1:5000/remainder"
 
 engine=pyttsx3.init()
 # rate=engine.getProperty('rate')
@@ -101,8 +103,8 @@ if __name__=='__main__':
                         elif "add" in todoTarget:
                             todoTarget=""
                             print("What would you like to add to the todo-list")
-                            add=takeUtterance(10).lower()
-                            #requests.post('http://127.0.0.1:5000/todos', data={'task': add}).json()
+                            add=takeUtterance(6).lower()
+                            requests.post(Todourl, data={'task': add}).json()
                             logManager("Add item to todolist")
                             #Variable to monitor your todo
                             hook=True
@@ -118,7 +120,7 @@ if __name__=='__main__':
                                     addTodo=""
                                     print("What is it?")
                                     addItem=takeUtterance(6).lower()
-                                    #requests.post('http://127.0.0.1:5000/todos', data={'task': addItem}).json()
+                                    requests.post(Todourl, data={'task': addItem}).json()
                                     logManager("Add item to todolist")
                                 elif 'no' in addTodo:
                                     addTodo=""
@@ -129,9 +131,9 @@ if __name__=='__main__':
                         elif "check" in todoTarget:
                             todoTarget=""
                             print("This is your current todo-list")
-                            # response=requests.get('http://127.0.0.1:5000/todos').json()
-                            # for todo in response:
-                            #         print(todo['task'])
+                            response=requests.get(Todourl).json()
+                            for todo in response:
+                                    print(todo['task'])
                         elif "exit" or "leave" in todoTarget:
                             todoTarget=""
                             todoHook=False
@@ -158,15 +160,36 @@ if __name__=='__main__':
                                 time=takeUtterance(6).lower()
                                 print("Would you like to set another remainder or no to exit?")
                                 nextrem=takeUtterance(6).lower()
-                                #requests.post('http://127.0.0.1:5000/remainder', data={'remainder': rem,'date':senddate, 'time':time}).json()
+                                requests.post(Remurl, data={'remainder': rem,'date':senddate, 'time':time}).json()
                                 if "no" in nextrem:
                                     remain=False
                                 elif "yes" in nextrem:
                                     continue
-                            elif senddate==0 or senddate=="None":
+                            elif senddate==0 or senddate==None:
                                 print("I didn't get the date well, could you please repeat?")
                             elif 'exit' in senddate:
                                 remain=False
+                    elif "check" in remainder:
+                        print("Which day would you like to check the remainder for?")
+                        #check event handler
+                        check=True
+                        while check:
+                            date=takeUtterance(6).lower()
+                            checkdate=speechtodate(date)
+                            if senddate==0 or senddate==None:
+                                print("I didn't get the date properly could you please repeat?")
+                            elif "no" in date:
+                                check=False
+                            else:
+                                remainderResp=requests.get(Remurl+"/"+senddate).json()
+                                if len(remainderResp)==0:
+                                    print("There is no remainder on that day.")
+                                    check=False
+                                else:
+                                    print("This are the remainders")
+                                    for i in remainderResp:
+                                        print(i)
+                                    check=False
 
                 #This is the sleep/ exit command of the program.
                 elif "good bye" in statement or "goodbye" in statement or "ok bye" in statement or "turn off" in statement or "quit" in statement:

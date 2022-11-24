@@ -20,8 +20,7 @@ response01=requests.get('http://127.0.0.1:5000/todos').json()
 variable="Remember the milk"
 requests.post('http://127.0.0.1:5000/todos', data={'task': variable}).json()
 response02=requests.get('http://127.0.0.1:5000/todos').json()
-TODOS = [
-    {'id':1,'task': 'Build an API'},
-    {'id':2,'task': 'Write my documentation'},
-    {'id':3,'task': 'Profit!'}
-]
+
+#Checking the values in the todos
+response01=requests.get('http://127.0.0.1:5000/remainder'+"/"+"2022-11-23").json()
+print(response01)

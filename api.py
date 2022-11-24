@@ -5,17 +5,21 @@ app = Flask(__name__)
 api = Api(app)
 
 TODOS = [
-    {'id':1,'task': 'Build an API'},
+    {'id':1,'task': 'Build an API for the project'},
     {'id':2,'task': 'Write my documentation'},
-    {'id':3,'task': 'Profit!'}
+    {'id':3,'task': 'Purchase a 555 timer'}
 ]
 
 LOG = [
     {'id':1,'log': 'Crystal time-management project.'}
 ]
 REMAINDER = [
-    {"id":1,'remainder': 'Build an API.',"date":"2012-11-23","time":"one"},
-    {"id":2,'remainder': 'Get some shopping.',"date":"2012-11-23","time":"one"}
+    {"id":1,'remainder': 'Build an API. for the project',"date":"2022-11-23","time":"one"},
+    {"id":2,'remainder': 'Get some shopping get some groceries.',"date":"2022-11-23","time":"six"},
+    {"id":3,'remainder': 'Go to the gym.',"date":"2022-11-25","time":"three"},
+    {"id":4,'remainder': 'Check the propulsion system.',"date":"2022-11-25","time":"nine"},
+    {"id":5,'remainder': 'Write final year report.',"date":"2022-11-26","time":"one"},
+    {"id":6,'remainder': 'Study accounting.',"date":"2022-11-26","time":"twelve"}
 ]
 
 parser = reqparse.RequestParser()
@@ -95,10 +99,11 @@ remparser.add_argument('time',location='form')
 # shows a single remainder item and lets you delete a remainder item
 class Remainder(Resource):
     def get(self, rem_id):
-        rem_id=int(rem_id)
-        for rem in REMAINDER:
-            if rem_id==rem['id']:
-                return rem
+        task=[]
+        for i in REMAINDER:
+            if i['date']==rem_id:
+                task.append(i['remainder']+" at "+i['time'])
+        return task,200
 
     def delete(self, rem_id):
         rem_id=int(rem_id)
