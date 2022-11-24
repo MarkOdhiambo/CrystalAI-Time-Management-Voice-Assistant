@@ -25,7 +25,7 @@ engine=pyttsx3.init()
 
 def speak(text):
     engine.say(text)
-    engine.runAndWait
+    engine.runAndWait()
 
 def timeSalutation():
     hour=datetime.datetime.now().hour
