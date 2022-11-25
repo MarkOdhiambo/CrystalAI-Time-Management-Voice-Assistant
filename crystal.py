@@ -110,7 +110,7 @@ if __name__=='__main__':
                             hook=True
                             while hook:
                                 speak("Is there anything else you would like to add?")
-                                addTodo=takeUtterance(10).lower()
+                                addTodo=takeUtterance(5).lower()
                                 #Handling some error context
                                 if len(addTodo)==4:
                                     addTodo=""
