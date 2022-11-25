@@ -13,9 +13,9 @@ from texttotime import speechtodate
 #Declaring constants
 
 #Log url
-Logurl="http://127.0.0.1:5000/log"
-Todourl="http://127.0.0.1:5000/todos"
-Remurl="http://127.0.0.1:5000/remainder"
+Logurl="https://ninjaslayer.pythonanywhere.com/log"
+Todourl="https://ninjaslayer.pythonanywhere.com/todos"
+Remurl="https://ninjaslayer.pythonanywhere.com/remainder"
 
 engine=pyttsx3.init()
 # rate=engine.getProperty('rate')
@@ -147,6 +147,7 @@ if __name__=='__main__':
                     if len(remainder) ==4:
                         speak("You can either set or check you remainders")
                     elif "set" in remainder:
+                        logManager("Accessed the set in the remainder.")
                         speak("What day would you like to set your remainder")
                         #Remainder event handler
                         remain=True
@@ -161,6 +162,7 @@ if __name__=='__main__':
                                 speak("Would you like to set another remainder or no to exit?")
                                 nextrem=takeUtterance(6).lower()
                                 requests.post(Remurl, data={'remainder': rem,'date':senddate, 'time':time}).json()
+                                logManager("The assistant has posted a remainder")
                                 if "no" in nextrem:
                                     remain=False
                                 elif "yes" in nextrem:
@@ -171,6 +173,7 @@ if __name__=='__main__':
                                 remain=False
                     elif "check" in remainder:
                         speak("Which day would you like to check the remainder for?")
+                        logManager("Accessed the check in the remainder")
                         #check event handler
                         check=True
                         while check:
@@ -187,6 +190,7 @@ if __name__=='__main__':
                                     check=False
                                 else:
                                     speak("This are the remainders")
+                                    logManager("The remainders where iterated.")
                                     for i in remainderResp:
                                         speak(i)
                                     check=False
