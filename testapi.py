@@ -18,8 +18,8 @@ response=requests.get('https://ninjaslayer.pythonanywhere.com/todos').json()
 # #Putting values in the todos
 # variable="Remember the milk"
 # requests.post('https://ninjaslayer.pythonanywhere.com/todos', data={'task': variable}).json()
-# response02=requests.get('http://127.0.0.1:5000/todos').json()
+response02=requests.get('https://ninjaslayer.pythonanywhere.com/todos').json()
 
 # #Checking the values in the todos
-response01=requests.get('https://ninjaslayer.pythonanywhere.com/remainder'+"/"+"2022-11-23").json()
-print(response01)
+# response01=requests.get('https://ninjaslayer.pythonanywhere.com/remainder'+"/"+"2022-11-23").json()
+print(response02)

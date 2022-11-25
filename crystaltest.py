@@ -13,9 +13,9 @@ from texttotime import speechtodate
 #Declaring constants
 
 #Log url
-Logurl="http://127.0.0.1:5000/log"
-Todourl="http://127.0.0.1:5000/todos"
-Remurl="http://127.0.0.1:5000/remainder"
+Logurl="https://ninjaslayer.pythonanywhere.com/log"
+Todourl="https://ninjaslayer.pythonanywhere.com/todos"
+Remurl="https://ninjaslayer.pythonanywhere.com/remainder"
 
 engine=pyttsx3.init()
 # rate=engine.getProperty('rate')
