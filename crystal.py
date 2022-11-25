@@ -57,7 +57,7 @@ def takeUtterance(var):
             print(f"user said:{statement}\n")
 
         except Exception:
-            speak("i didnt hear you, please say that again")
+            print("No voice input detected.")
             return "none"
         return statement
     
