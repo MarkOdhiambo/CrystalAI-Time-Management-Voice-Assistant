@@ -13,7 +13,9 @@ from texttotime import speechtodate
 #Declaring constants
 
 #Log url
-#Logurl="http://127.0.0.1:5000/log"
+Logurl="http://127.0.0.1:5000/log"
+Todourl="http://127.0.0.1:5000/todos"
+Remurl="http://127.0.0.1:5000/remainder"
 
 engine=pyttsx3.init()
 # rate=engine.getProperty('rate')
@@ -62,7 +64,7 @@ def takeUtterance(var):
 #log manager for the activitylog
 def logManager(var):
     log=dateCalculation()+" " + var
-    #requests.post(Logurl, data={'log': log}).json()
+    requests.post(Logurl, data={'log': log}).json()
     
 #Information or data to be posted into the api
 if __name__=='__main__': 
@@ -76,11 +78,11 @@ if __name__=='__main__':
             while wake:
                 #Openning message event handler
                 if open==1:
-                    speak("What can I do for you set a remainder or access a todo list?")
+                    speak("What can I do for you set a remainder or access a todo list? Say goodbye to exit")
                 if open==0:
                     logManager("Wake word detected program begun")
                     print("Wake word detected.")
-                    speak(timeSalutation()+" This is the crystal time management platform I can manage a todo list and set a remainder. What would you like to do today?")
+                    speak(timeSalutation()+" This is the mark time management platform I can manage a todo list and set a remainder. What would you like to do today?")
                     open+=1
                 statement=takeUtterance(5).lower()
                 if len(statement)==4:
@@ -102,7 +104,7 @@ if __name__=='__main__':
                             todoTarget=""
                             speak("What would you like to add to the todo-list")
                             add=takeUtterance(10).lower()
-                            #requests.post('http://127.0.0.1:5000/todos', data={'task': add}).json()
+                            requests.post(Todourl, data={'task': add}).json()
                             logManager("Add item to todolist")
                             #Variable to monitor your todo
                             hook=True
@@ -118,7 +120,7 @@ if __name__=='__main__':
                                     addTodo=""
                                     speak("What is it?")
                                     addItem=takeUtterance(6).lower()
-                                    requests.post('http://127.0.0.1:5000/todos', data={'task': addItem}).json()
+                                    requests.post(Todourl, data={'task': addItem}).json()
                                     logManager("Add item to todolist")
                                 elif 'no' in addTodo:
                                     addTodo=""
@@ -129,9 +131,9 @@ if __name__=='__main__':
                         elif "check" in todoTarget:
                             todoTarget=""
                             speak("This is your current todo-list")
-                            # response=requests.get('http://127.0.0.1:5000/todos').json()
-                            # for todo in response:
-                            #         speak(todo['task'])
+                            response=requests.get(Todourl).json()
+                            for todo in response:
+                                    speak(todo['task'])
                         elif "exit" or "leave" in todoTarget:
                             todoTarget=""
                             todoHook=False
@@ -158,7 +160,7 @@ if __name__=='__main__':
                                 time=takeUtterance(6).lower()
                                 speak("Would you like to set another remainder or no to exit?")
                                 nextrem=takeUtterance(6).lower()
-                                #requests.post('http://127.0.0.1:5000/remainder', data={'remainder': rem,'date':senddate, 'time':time}).json()
+                                requests.post(Remurl, data={'remainder': rem,'date':senddate, 'time':time}).json()
                                 if "no" in nextrem:
                                     remain=False
                                 elif "yes" in nextrem:
@@ -167,6 +169,27 @@ if __name__=='__main__':
                                 speak("I didn't get the date well, could you please repeat?")
                             elif 'exit' in senddate:
                                 remain=False
+                    elif "check" in remainder:
+                        speak("Which day would you like to check the remainder for?")
+                        #check event handler
+                        check=True
+                        while check:
+                            date=takeUtterance(6).lower()
+                            checkdate=speechtodate(date)
+                            if senddate==0 or senddate==None:
+                                speak("I didn't get the date properly could you please repeat?")
+                            elif "no" in date:
+                                check=False
+                            else:
+                                remainderResp=requests.get(Remurl+"/"+senddate).json()
+                                if len(remainderResp)==0:
+                                    speak("There is no remainder on that day.")
+                                    check=False
+                                else:
+                                    speak("This are the remainders")
+                                    for i in remainderResp:
+                                        speak(i)
+                                    check=False
 
 
                 #This is the sleep/ exit command of the program.

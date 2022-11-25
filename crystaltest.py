@@ -78,11 +78,11 @@ if __name__=='__main__':
             while wake:
                 #Openning message event handler
                 if open==1:
-                    print("What can I do for you set a remainder or access a todo list?")
+                    print("What can I do for you set a remainder or access a todo list? Say goodbye to exit")
                 if open==0:
                     logManager("Wake word detected program begun")
                     print("Wake word detected.")
-                    print(timeSalutation()+" This is the crystal time management platform I can manage a todo list and set a remainder. What would you like to do today?")
+                    print(timeSalutation()+" This is the mark time management platform where I can manage a todo list and set a remainder. What would you like to do today?")
                     open+=1
                 statement=takeUtterance(5).lower()
                 if len(statement)==4:
@@ -167,7 +167,7 @@ if __name__=='__main__':
                                     continue
                             elif senddate==0 or senddate==None:
                                 print("I didn't get the date well, could you please repeat?")
-                            elif 'exit' in senddate:
+                            elif 'exit' in senddate or 'no' in senddate:
                                 remain=False
                     elif "check" in remainder:
                         print("Which day would you like to check the remainder for?")

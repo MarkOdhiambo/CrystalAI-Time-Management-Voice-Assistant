@@ -9,8 +9,8 @@ with sr.Microphone() as source:
         statement=r.recognize_google(audio,language="en-in")
         print(f"user said:{statement}\n")
 
-    except Exception:
-        print("i didnt hear you, please say that again")
-        
+    except Exception as e:
+        print(e)
+
     print(statement)
 
